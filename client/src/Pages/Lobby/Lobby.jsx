@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "./Lobby.scss";
 
 const Lobby = () => {
-  const codeblocks = [
-    { id: 1, title: "Code Block 1" },
-    { id: 2, title: "Code Block 2" },
-    { id: 3, title: "Code Block 3" },
-    { id: 4, title: "Code Block 4" },
-  ];
+  const [codeblocks, setCodeblocks] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/codeblocks")
+      .then((response) => {
+        setCodeblocks(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <div className="lobby-container">
@@ -16,8 +23,8 @@ const Lobby = () => {
       <div className="codeblock-grid">
         {codeblocks.map((block) => (
           <Link
-            key={block.id}
-            to={`/codeblock/${block.id}`}
+            key={block._id}
+            to={`/codeblock/${block.short_id}`}
             className="codeblock-link"
           >
             <div className="codeblock-item">{block.title}</div>

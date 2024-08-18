@@ -9,7 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Lobby />} />
-          <Route path="/codeblock/:id" element={<CodeBlock />} />
+          <Route path="/codeblock/:short_id" element={<CodeBlock />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
