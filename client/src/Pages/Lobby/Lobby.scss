@@ -1,0 +1,71 @@
+.lobby-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding-bottom: 20px;
+  background-color: #e3f2fd;
+}
+
+.lobby-title {
+  font-size: 4rem;
+  color: #0d47a1;
+  margin-bottom: 50px;
+  font-family: "Suez One", serif;
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+}
+
+.codeblock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 30px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.codeblock-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #42a5f5;
+  border: 2px solid #1e88e5;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 160px;
+}
+
+.codeblock-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.codeblock-link {
+  text-decoration: none;
+  font-size: 2rem;
+  color: #ffffff;
+  text-align: center;
+  font-weight: bold;
+}
+
+.codeblock-item:active {
+  transform: translateY(2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .lobby-title {
+    font-size: 2.5rem;
+  }
+  .codeblock-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
+  .codeblock-item {
+    height: 150px;
+  }
+}
