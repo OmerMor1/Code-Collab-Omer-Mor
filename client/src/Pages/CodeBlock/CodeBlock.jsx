@@ -99,11 +99,14 @@ const CodeBlock = () => {
 
   const handleRunCode = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/compiler", {
-        script: code,
-        language: "nodejs",
-        versionIndex: "3",
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/compiler`,
+        {
+          script: code,
+          language: "nodejs",
+          versionIndex: "3",
+        }
+      );
       const result = response.data.output;
       if (result) {
         setOutput(result);
