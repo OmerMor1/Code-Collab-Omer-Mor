@@ -26,7 +26,7 @@ const CodeBlock = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/codeblocks/${short_id}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/codeblocks/${short_id}`)
       .then((response) => {
         setCode(response.data.content);
         setSolution(response.data.solution);
