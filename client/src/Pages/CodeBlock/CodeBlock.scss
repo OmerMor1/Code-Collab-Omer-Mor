@@ -51,22 +51,6 @@
   text-align: center;
 }
 
-.exit-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  color: #ffffff;
-  background-color: #0d47a1;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.exit-button:hover {
-  background-color: #1e88e5;
-}
-
 .mentor-left-message {
   position: fixed;
   top: 50%;
@@ -91,4 +75,54 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: -1;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.run-button,
+.exit-button {
+  width: 25%;
+  height: 30px;
+  padding: 5px;
+  font-size: 1.2rem;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.run-button {
+  background-color: #43a047;
+}
+
+.run-button:hover {
+  background-color: #66bb6a;
+}
+
+.exit-button {
+  background-color: #d32f2f;
+}
+
+.exit-button:hover {
+  background-color: #e57373;
+}
+
+.output-container {
+  width: 80%;
+  min-height: 200px;
+  margin-top: 20px;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  font-family: "Fira code", "Fira Mono", monospace;
+  white-space: pre-wrap;
 }

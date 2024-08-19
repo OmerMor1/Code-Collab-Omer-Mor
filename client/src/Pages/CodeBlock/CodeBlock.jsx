@@ -22,6 +22,7 @@ const CodeBlock = () => {
   const [showSmiley, setShowSmiley] = useState(false);
   const [userCount, setUserCount] = useState(0);
   const [mentorLeft, setMentorLeft] = useState(false);
+  const [output, setOutput] = useState("");
 
   useEffect(() => {
     axios
@@ -96,6 +97,24 @@ const CodeBlock = () => {
     setShowSmiley(false);
   };
 
+  const handleRunCode = async () => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/compiler", {
+        script: code,
+        language: "nodejs",
+        versionIndex: "3",
+      });
+      const result = response.data.output;
+      if (result) {
+        setOutput(result);
+      } else {
+        setOutput("No output");
+      }
+    } catch (err) {
+      setOutput(`Error: ${err.message}`);
+    }
+  };
+
   return (
     <div className="codeblock-container">
       <h1 className="codeblock-title">
@@ -115,14 +134,23 @@ const CodeBlock = () => {
         className="codeblock-editor"
         readOnly={role === "mentor" || userCount === 1}
       />
+      <div className="buttons-container">
+        <button onClick={handleRunCode} className="run-button">
+          Run Code
+        </button>
+        <button onClick={handleExit} className="exit-button">
+          Exit
+        </button>
+      </div>
+      <div className="output-container">
+        <h3>Output:</h3>
+        <pre>{output}</pre>
+      </div>
       {showSmiley && (
         <div className="smiley-popup" onClick={handleCloseSmiley}>
           <div className="smiley-content">😊</div>
         </div>
       )}
-      <button onClick={handleExit} className="exit-button">
-        Exit
-      </button>
     </div>
   );
 };

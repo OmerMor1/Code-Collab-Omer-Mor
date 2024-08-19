@@ -5,6 +5,7 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import usersSocket from "./sockets/usersSocket.js";
+import complierRoute from "./routes/compiler.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.use(express.json());
 
 connectDB();
 app.use("/api/codeblocks", codeBlockRoute);
+app.use("/api/compiler", complierRoute);
 
 io.on("connection", (socket) => {
   usersSocket(io, socket);
