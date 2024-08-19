@@ -8,7 +8,7 @@ import "prismjs/components/prism-jsx.min";
 import "./CodeBlock.scss";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000", {
+const socket = io(process.env.REACT_APP_API_URL || "http://localhost:5000", {
   transports: ["websocket"],
   upgrade: false,
 });
