@@ -69,7 +69,7 @@ const CodeBlock = () => {
       socket.off("resetCodeMentorLeft");
       socket.off("showSmileyInBlockRoom");
     };
-  }, [short_id]);
+  }, [short_id, navigate]);
 
   const removeComments = (code) => {
     return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "").trim();
@@ -158,6 +158,7 @@ const CodeBlock = () => {
               formatOnType: true,
               fontSize: 16,
               padding: { top: 13 },
+              readOnly: role === "mentor",
             }}
           />
           <div className="buttons-container">
