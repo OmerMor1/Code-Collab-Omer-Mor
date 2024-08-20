@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs";
-import "prismjs/themes/prism.css";
-import "prismjs/components/prism-jsx.min";
 import "./CodeBlock.scss";
 import { io } from "socket.io-client";
+import EmojiObjectsOutlinedIcon from "@mui/icons-material/EmojiObjectsOutlined";
+import Monaco from "@monaco-editor/react";
 
 const socket = io(process.env.REACT_APP_API_URL || "http://localhost:5000", {
   transports: ["websocket"],
@@ -23,6 +21,9 @@ const CodeBlock = () => {
   const [userCount, setUserCount] = useState(0);
   const [mentorLeft, setMentorLeft] = useState(false);
   const [output, setOutput] = useState("");
+  const [description, setDescription] = useState("");
+  const [hints, setHints] = useState([]);
+  const [showHints, setShowHints] = useState([false, false]);
 
   useEffect(() => {
     axios
@@ -30,6 +31,8 @@ const CodeBlock = () => {
       .then((response) => {
         setCode(response.data.content);
         setSolution(response.data.solution);
+        setDescription(response.data.description);
+        setHints(response.data.hints);
       })
       .catch((err) => console.error("Error fetching code block:", err));
 
@@ -104,9 +107,11 @@ const CodeBlock = () => {
         {
           script: code,
           language: "nodejs",
-          versionIndex: "3",
+          version: "latest",
+          input: "",
         }
       );
+
       const result = response.data.output;
       if (result) {
         setOutput(result);
@@ -116,6 +121,14 @@ const CodeBlock = () => {
     } catch (err) {
       setOutput(`Error: ${err.message}`);
     }
+  };
+
+  const openSelectedHint = (index) => {
+    setShowHints((prev) => {
+      const newShowHints = [...prev];
+      newShowHints[index] = !newShowHints[index];
+      return newShowHints;
+    });
   };
 
   return (
@@ -129,26 +142,59 @@ const CodeBlock = () => {
           Mentor has left the code block page. Redirecting to lobby...
         </div>
       )}
-      <Editor
-        value={code}
-        onValueChange={handleCodeChange}
-        highlight={(code) => highlight(code, languages.jsx, "jsx")}
-        padding={15}
-        className="codeblock-editor"
-        readOnly={role === "mentor" || userCount === 1}
-      />
-      <div className="buttons-container">
-        <button onClick={handleRunCode} className="run-button">
-          Run Code
-        </button>
-        <button onClick={handleExit} className="exit-button">
-          Exit
-        </button>
+      <div className="content-container">
+        <div className="editor-container">
+          <Monaco
+            height="300px"
+            defaultLanguage="javascript"
+            value={code}
+            onChange={handleCodeChange}
+            theme="vs-light"
+            options={{
+              automaticLayout: true,
+              wordWrap: "on",
+              minimap: { enabled: false },
+              insertSpaces: true,
+              formatOnType: true,
+              fontSize: 16,
+              padding: { top: 13 },
+            }}
+          />
+          <div className="buttons-container">
+            <button onClick={handleRunCode} className="run-button">
+              Run Code
+            </button>
+            <button onClick={handleExit} className="exit-button">
+              Exit
+            </button>
+          </div>
+          <div className="output-container">
+            <h3 className="output-title">Output:</h3>
+            <pre>{output}</pre>
+          </div>
+        </div>
+        <div className="description-container">
+          <p className="description">
+            Description: <br /> <br />
+            {description}
+          </p>
+          <div className="hints-container">
+            {hints.map((hint, index) => (
+              <div key={index}>
+                <button
+                  onClick={() => openSelectedHint(index)}
+                  className="hint-button"
+                >
+                  <EmojiObjectsOutlinedIcon style={{ marginRight: "6px" }} />
+                  {`Hint ${index + 1}`}
+                </button>
+                {showHints[index] && <p className="hint">{hint.text}</p>}{" "}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      <div className="output-container">
-        <h3>Output:</h3>
-        <pre>{output}</pre>
-      </div>
+
       {showSmiley && (
         <div className="smiley-popup" onClick={handleCloseSmiley}>
           <div className="smiley-content">😊</div>

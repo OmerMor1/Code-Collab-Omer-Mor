@@ -5,13 +5,23 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-    const response = await axios.post("https://api.jdoodle.com/v1/execute", {
-      script: req.body.script,
-      language: req.body.language,
-      versionIndex: req.body.versionIndex,
-      clientId: process.env.JDOODLE_CLIENT_ID,
-      clientSecret: process.env.JDOODLE_CLIENT_SECRET,
-    });
+    const options = {
+      method: "POST",
+      url: "https://online-code-compiler.p.rapidapi.com/v1/",
+      headers: {
+        "x-rapidapi-key": process.env.RAPIDAPI_KEY,
+        "x-rapidapi-host": "online-code-compiler.p.rapidapi.com",
+        "Content-Type": "application/json",
+      },
+      data: {
+        language: req.body.language,
+        version: req.body.version || "latest",
+        code: req.body.script,
+        input: req.body.input || null,
+      },
+    };
+
+    const response = await axios.request(options);
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
