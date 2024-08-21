@@ -25,6 +25,7 @@ const CodeBlock = () => {
   const [description, setDescription] = useState("");
   const [hints, setHints] = useState([]);
   const [showHints, setShowHints] = useState([false, false]);
+  const [showSolution, setShowSolution] = useState(false);
 
   useEffect(() => {
     axios
@@ -123,12 +124,16 @@ const CodeBlock = () => {
     });
   };
 
+  const openSolutionForMentor = () => {
+    setShowSolution((prev) => !prev);
+  };
+
   return (
     <div className="codeblock-container">
       <h1 className="codeblock-title">
         {role === "mentor" ? "Mentor View" : "Student View"}
       </h1>
-      <p>Users in this block: {userCount}</p>
+      <p>Users in this code block: {userCount}</p>
       {mentorLeft && (
         <div className="mentor-left-message">
           Mentor has left the code block page. Redirecting to lobby...
@@ -185,6 +190,21 @@ const CodeBlock = () => {
               </div>
             ))}
           </div>
+          {role === "mentor" && (
+            <div>
+              <button
+                onClick={openSolutionForMentor}
+                className="watch-solution-button"
+              >
+                {showSolution ? "Hide Solution" : "Watch Solution"}
+              </button>
+              {showSolution && (
+                <div className="solution-container">
+                  <pre>{solution}</pre>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
       {showSmiley && (
