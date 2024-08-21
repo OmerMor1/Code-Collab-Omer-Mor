@@ -34,15 +34,9 @@ export default function usersSocket(io, socket) {
 
   socket.on(
     "codeChangeInBlockRoom",
-    ({ blockId, newCode, newCodeWithoutComments, solution }) => {
+    ({ blockId, newCode, isSolutionCorrect }) => {
       io.to(blockId).emit("updateCodeInBlookRoom", newCode);
-      let checkSolution;
-      if (newCodeWithoutComments === solution) {
-        checkSolution = true;
-      } else {
-        checkSolution = false;
-      }
-      io.to(blockId).emit("showSmileyInBlockRoom", checkSolution);
+      io.to(blockId).emit("showSmileyInBlockRoom", isSolutionCorrect);
     }
   );
 

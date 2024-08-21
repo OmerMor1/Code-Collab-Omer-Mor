@@ -5,6 +5,7 @@ import "./CodeBlock.scss";
 import { io } from "socket.io-client";
 import EmojiObjectsOutlinedIcon from "@mui/icons-material/EmojiObjectsOutlined";
 import Monaco from "@monaco-editor/react";
+import { processCode } from "../../utils/CompareSolution";
 
 const socket = io(process.env.REACT_APP_API_URL || "http://localhost:5000", {
   transports: ["websocket"],
@@ -71,24 +72,15 @@ const CodeBlock = () => {
     };
   }, [short_id, navigate]);
 
-  const removeComments = (code) => {
-    return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "").trim();
-  };
-
-  const handleCodeChange = (newCode) => {
+  const handleCodeChange = async (newCode) => {
     setCode(newCode);
-    let newCodeWithoutComments = removeComments(newCode);
+    const isSolutionCorrect = await processCode(newCode, solution);
     socket.emit("codeChangeInBlockRoom", {
       blockId: short_id,
       newCode,
-      newCodeWithoutComments,
-      solution,
+      isSolutionCorrect,
     });
-    if (newCodeWithoutComments === solution) {
-      setShowSmiley(true);
-    } else {
-      setShowSmiley(false);
-    }
+    setShowSmiley(isSolutionCorrect);
   };
 
   const handleExit = () => {
@@ -195,7 +187,6 @@ const CodeBlock = () => {
           </div>
         </div>
       </div>
-
       {showSmiley && (
         <div className="smiley-popup" onClick={handleCloseSmiley}>
           <div className="smiley-content">😊</div>
